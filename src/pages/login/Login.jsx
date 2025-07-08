@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { FaLock, FaUserCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigate = useNavigate()
+
   const handleLogin = () => {
     if (!userId || !password) return alert("Please enter both ID and password");
 
     if (userId.startsWith("T") && password === "teacher123") {
-      window.location.href = "/teacher-dashboard";
+      navigate("/teacher-dashboard")
     } else if (userId.startsWith("S") && password === "student123") {
-      window.location.href = "/student-dashboard";
+      navigate("/student-dashboard")
     } else {
       alert("Invalid credentials");
     }
