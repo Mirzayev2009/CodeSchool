@@ -1,52 +1,129 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaChalkboardTeacher } from 'react-icons/fa';
-
-const teacher = {
-  id: 't1',
-  name: 'Umidbek',
-  subject: 'AI',
-  groups: [
-    { id: 'g1', name: 'AI Bootcamp (Morning)' },
-    { id: 'g2', name: 'AI Bootcamp (Evening)' },
-  ],
-};
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FaChalkboardTeacher, FaLayerGroup } from 'react-icons/fa';
+import { BookOpenCheck, CalendarDays } from 'lucide-react';
+import Sidebar from '@/components/Sidebar';
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
+  const [teacher, setTeacher] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const today = new Date().toISOString().split('T')[0];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const teacherRes = await fetch('/data/teacher.json');
+        const teacherData = await teacherRes.json();
+
+        const groupRes = await fetch('/data/groups.json');
+        const groupData = await groupRes.json();
+
+        // Match full group data based on teacher's group IDs
+        const matchedGroups = groupData.filter((g) =>
+          teacherData.groups.some((tg) => tg.id === g.id)
+        );
+
+        setTeacher(teacherData);
+        setGroups(matchedGroups);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (!teacher) {
+    return <div className="text-white p-6">Yuklanmoqda...</div>;
+  }
+
+  const totalStudents = groups.reduce((sum, g) => sum + g.students.length, 0);
+  const todaysGroups = groups.filter((g) => Array.isArray(g.dates) && g.dates.includes(today));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] p-6 text-white">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <FaChalkboardTeacher className="mx-auto text-6xl text-green-400 animate-pulse drop-shadow-glow" />
-          <h1 className="text-5xl font-extrabold tracking-tight mt-4 drop-shadow-glow">
-            Welcome, <span className="text-green-300">{teacher.name}</span> 👨‍🏫
-          </h1>
-          <p className="text-lg mt-2 text-gray-300">Your subject: <strong className="text-white">{teacher.subject}</strong></p>
-        </div>
+    <div className="flex min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
+      <Sidebar />
 
-        {/* Groups */}
-        <h2 className="text-2xl font-bold mb-6 text-green-100 tracking-wider uppercase">💼 Your Groups</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {teacher.groups.map((group) => (
-            <div
-              key={group.id}
-              onClick={() => navigate(`/teacher-dashboard/group/${group.id}`)}
-              className="cursor-pointer p-6 rounded-2xl border-2 border-green-400 bg-gradient-to-br from-green-600 via-green-500 to-green-400 shadow-2xl transition-all duration-300 transform hover:scale-105 hover:rotate-1 hover:shadow-green-500/50"
-            >
-              <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-glow">
-                {group.name}
-              </h3>
-              <p className="text-green-100 font-medium">Tap to manage this group</p>
+      <main className="flex-1 p-6 md:p-10">
+        <div className="max-w-6xl mx-auto space-y-10">
+          {/* Welcome block */}
+          <div className="bg-gradient-to-br from-[#1a2e3a] to-[#294759] rounded-xl shadow-xl p-6 flex items-center gap-6 border border-green-600">
+            <FaChalkboardTeacher className="text-5xl text-green-400" />
+            <div>
+              <h1 className="text-3xl font-bold">Xush kelibsiz, {teacher.name}</h1>
+              <p className="text-sm text-gray-300">Fan: <span className="text-white">{teacher.subject}</span></p>
             </div>
-          ))}
+          </div>
+
+          {/* Stats cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <Card className="bg-gradient-to-br from-[#1a2e3a] to-[#294759] border border-green-500 text-white shadow-md">
+              <CardHeader className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium">Jami guruhlar</CardTitle>
+                <FaLayerGroup className="text-green-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{groups.length}</div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-[#1a2e3a] to-[#294759] border border-blue-500 text-white shadow-md">
+              <CardHeader className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium">Bugungi darslar</CardTitle>
+                <CalendarDays className="text-blue-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{todaysGroups.length}</div>
+                {todaysGroups.length > 0 ? (
+                  <p className="text-sm text-gray-300">
+                    {todaysGroups.map(g => g.name).join(', ')}
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-400">Bugun dars yo‘q</p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-[#1a2e3a] to-[#294759] border border-orange-500 text-white shadow-md">
+              <CardHeader className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium">O'quvchilar</CardTitle>
+                <BookOpenCheck className="text-orange-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalStudents}</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Today’s lessons */}
+          <div>
+            <h2 className="text-xl font-bold text-green-200 mb-4">💼 Bugungi darslar</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {todaysGroups.map(group => (
+                <Card
+                  key={group.id}
+                  onClick={() => navigate(`/teacher-dashboard/group/${group.id}`)}
+                  className="cursor-pointer bg-gradient-to-br from-[#1c2d38] to-[#2a4256] border border-green-500 text-white shadow-lg hover:scale-105 transition transform"
+                >
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold text-green-300">{group.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm text-gray-300">
+                    <p>Talabalar soni: {group.students.length}</p>
+                    <p className="text-xs text-green-100 mt-1">Bosing va darsni boshqaring</p>
+                  </CardContent>
+                </Card>
+              ))}
+              {todaysGroups.length === 0 && (
+                <p className="text-gray-400 text-sm">💼 Bugun dars yo‘q</p>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
 
 export default TeacherDashboard;
-

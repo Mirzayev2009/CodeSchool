@@ -1,0 +1,36 @@
+{
+  "2025-07-07": [
+    {
+      "id": "hw1",
+      "title": "Explain Overfitting",
+      "answer": "Overfitting is when a model memorizes the training data",
+      "type": "text"
+    },
+    {
+      "id": "hw2",
+      "title": "What is Supervised Learning?",
+      "answer": "Training a model using labeled data",
+      "type": "text"
+    },
+    {
+      "id": "hw3",
+      "title": "Write python code",
+      "answer": "",
+      "type": "code"
+    }
+  ],
+  "2025-07-08": [
+    {
+      "id": "hw4",
+      "title": "Name 3 types of Neural Networks",
+      "answer": "CNN, RNN, MLP",
+      "type": "text"
+    },
+    {
+      "id": "hw5",
+      "title": "Define Accuracy and Precision",
+      "answer": "Accuracy is total correct predictions; Precision is correct positive predictions",
+      "type": "text"
+    }
+  ]
+}

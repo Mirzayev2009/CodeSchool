@@ -1,0 +1,22 @@
+[
+  {
+    "id": "g1",
+    "name": "AI Bootcamp (Morning)",
+    "subject": "Artificial Intelligence",
+    "students": [
+      { "id": "s1", "name": "Jasur Ismoilov" },
+      { "id": "s2", "name": "Nilufar Ergasheva" }
+    ],
+    "dates": ["2025-07-07", "2025-07-08", "2025-07-09", "2025-07-17", "2025-07-17"]
+  },
+  {
+    "id": "g2",
+    "name": "AI Bootcamp (Evening)",
+    "subject": "Artificial Intelligence",
+    "students": [
+      { "id": "s3", "name": "Aziza Toshpulatova" },
+      { "id": "s4", "name": "Bekzod Jo‘rayev" }
+    ],
+    "dates": ["2025-07-08", "2025-07-09", "2025-07-17"]
+  }
+]

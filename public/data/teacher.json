@@ -1,0 +1,8 @@
+{
+  "name": "Umidbek",
+  "subject": "AI",
+  "groups": [
+    { "id": "g1", "name": "AI Bootcamp (Morning)", "students": 15 },
+    { "id": "g2", "name": "AI Bootcamp (Evening)", "students": 12 }
+  ]
+}
