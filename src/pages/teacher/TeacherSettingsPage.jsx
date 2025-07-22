@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from '@/components/Sidebar';
 import { FaCog, FaUser, FaBell, FaMoon } from 'react-icons/fa';
+import TeacherLayout from './TeacherLayout';
 
 const teacher = {
   name: 'Umidbek',
@@ -10,10 +11,7 @@ const teacher = {
 
 const TeacherSettingsPage = () => {
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
-      <Sidebar />
-
-      <main className="flex-1 p-6 md:p-10">
+    <TeacherLayout>
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
             <FaCog className="text-green-400" />
@@ -64,8 +62,7 @@ const TeacherSettingsPage = () => {
             </button>
           </div>
         </div>
-      </main>
-    </div>
+     </TeacherLayout>
   );
 };
 

@@ -1,73 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { FaUsers, FaCalendarAlt, FaUserGraduate } from 'react-icons/fa';
-import Sidebar from '@/components/Sidebar';
+  import React, { useEffect, useState } from 'react';
+  import { useNavigate } from 'react-router-dom';
+  import { FaUsers, FaUserGraduate, FaBook, FaClock } from 'react-icons/fa';
+  import TeacherLayout from './TeacherLayout';
 
-const TeacherGroupDetailsPage = () => {
-  const { groupId } = useParams();
-  const [group, setGroup] = useState(null);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('/data/groups.json')
-      .then(res => res.json())
-      .then(groups => {
-        const found = groups.find(g => g.id === groupId);
-        setGroup(found || null);
-      });
-  }, [groupId]);
+  const TeacherGroupsPage = () => {
+    const [groups, setGroups] = useState([]);
+    const navigate = useNavigate();
 
-  if (!group) {
-    return <div className="text-white p-6">⏳ Yuklanmoqda...</div>;
-  }
+    useEffect(() => {
+      fetch('/data/groups.json')
+        .then((res) => res.json())
+        .then(setGroups)
+        .catch((err) => console.error('Failed to load groups:', err));
+    }, []);
+  
+  
+  const getUniqueWeekCount = (dates) => {
+  const weekSet = new Set();
 
-  return (
-    <div className="flex min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
-      <Sidebar />
+  dates.forEach(dateStr => {
+    const date = new Date(dateStr);
+    const firstDay = new Date(date.getFullYear(), 0, 1);
+    const pastDays = (date - firstDay) / (1000 * 60 * 60 * 24);
+    const week = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+    weekSet.add(`${date.getFullYear()}-W${week}`);
+  });
 
-      <main className="flex-1 p-6 md:p-10">
-        <div className="max-w-4xl mx-auto space-y-10">
-          <div className="bg-[#1f2e35] rounded-xl p-6 border border-green-500 shadow-lg">
-            <h1 className="text-3xl font-bold text-green-200 mb-2">{group.name}</h1>
-            <p className="text-gray-300">Fan: <span className="text-white">{group.subject}</span></p>
-            <p className="text-gray-300 mt-1">Talabalar soni: {group.students.length}</p>
-          </div>
+  return weekSet.size;
+};
 
-          <div className="bg-[#1f2e35] rounded-xl p-6 border border-green-500 shadow-lg">
-            <h2 className="text-2xl font-semibold text-green-300 mb-4 flex items-center gap-2">
-              <FaCalendarAlt className="text-green-400" />
-              Dars Sanalari
-            </h2>
 
-            {group.dates.length === 0 ? (
-              <p className="text-gray-400">📭 Hech qanday sana mavjud emas.</p>
+    return (
+      <TeacherLayout>
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
+              <FaUsers className="text-green-400" />
+              Barcha Guruhlar
+            </h1>
+
+            {groups.length === 0 ? (
+              <p className="text-gray-300">⏳ Yuklanmoqda yoki guruhlar mavjud emas.</p>
             ) : (
-              <div className="flex flex-wrap gap-3">
-                {group.dates.map(date => (
-                  <button
-                    key={date}
-                    onClick={() => navigate(`/teacher-dashboard/group/${group.id}/date/${date}`)}
-                    className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-full text-sm font-medium border border-green-300"
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+                {groups.map((group) => (
+                  <div
+                    key={group.id}
+                    className="bg-[#1f2e35] border border-green-300 rounded-xl shadow-xl p-6 hover:border-green-500 transition-all"
                   >
-                    {date}
-                  </button>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-bold text-green-200">{group.name}</h3>
+                      <FaBook className="text-green-400 text-xl" />
+                    </div>
+
+                    <div className="space-y-2 text-sm text-gray-300">
+                      <div className="flex items-center gap-2">
+                        <FaUserGraduate className="text-green-400" />
+                        <span>Talabalar soni: {group.students.length}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <FaBook className="text-green-400" />
+                        <span>Fan: {group.subject}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <FaClock className="text-green-400" />
+                      <span>Haftalik darslar: {getUniqueWeekCount(group.dates)} ta</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => navigate(`/teacher-dashboard/group-detail/${group.id}`)}
+                      className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-all"
+                    >
+                      📂 Guruhni ko‘rish
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
           </div>
+      </TeacherLayout>
+    );
+  };
 
-          <div className="bg-[#1f2e35] rounded-xl p-6 border border-green-500 shadow-lg">
-            <h2 className="text-2xl font-semibold text-green-300 mb-3">👥 Talabalar ro‘yxati</h2>
-            <ul className="list-disc list-inside text-gray-200">
-              {group.students.map(student => (
-                <li key={student.id}>{student.name}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
+  export default TeacherGroupsPage;
 
-export default TeacherGroupDetailsPage;

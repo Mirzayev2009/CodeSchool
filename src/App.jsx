@@ -18,10 +18,10 @@ const App = () => {
         <Route path='/student-dashboard' element={<StudentPage/>}/>
         <Route path="/student-dashboard/group/:groupId" element={<StudentGroupPage />} />
         <Route path='/teacher-dashboard' element={<TeacherDashboard/>}/>
-        <Route path='/teacher-dashboard/group/:groupId' element={<TeacherGroupPageDEMO/>}/>
+<Route path='/teacher-dashboard/group/:groupId/lesson/:date' element={<TeacherGroupPageDEMO />} />
         <Route path="/teacher-dashboard/groups" element={<TeacherGroupsPage />} />
         <Route path="/teacher-dashboard/settings" element={<TeacherSettingsPage />} />
-        <Route path='/teacher-dashboard/group/:groupId/details' element= {<TeacherGroupDetailsPage/>}/>
+ <Route path='/teacher-dashboard/group-detail/:groupId' element={<TeacherGroupDetailsPage />} />
 
 
       </Routes>

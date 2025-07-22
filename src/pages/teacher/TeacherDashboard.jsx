@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FaChalkboardTeacher, FaLayerGroup } from 'react-icons/fa';
 import { BookOpenCheck, CalendarDays } from 'lucide-react';
-import Sidebar from '@/components/Sidebar';
+
+import TeacherLayout from './TeacherLayout';
+
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [teacher, setTeacher] = useState(null);
   const [groups, setGroups] = useState([]);
+
   const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
@@ -42,10 +45,12 @@ const TeacherDashboard = () => {
   const todaysGroups = groups.filter((g) => Array.isArray(g.dates) && g.dates.includes(today));
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
-      <Sidebar />
+    
 
-      <main className="flex-1 p-6 md:p-10">
+ <TeacherLayout>
+
+
+     
         <div className="max-w-6xl mx-auto space-y-10">
           {/* Welcome block */}
           <div className="bg-gradient-to-br from-[#1a2e3a] to-[#294759] rounded-xl shadow-xl p-6 flex items-center gap-6 border border-green-600">
@@ -103,7 +108,7 @@ const TeacherDashboard = () => {
               {todaysGroups.map(group => (
                 <Card
                   key={group.id}
-                  onClick={() => navigate(`/teacher-dashboard/group/${group.id}`)}
+                onClick={() => navigate(`/teacher-dashboard/group/${group.id}/lesson/${today}`)}
                   className="cursor-pointer bg-gradient-to-br from-[#1c2d38] to-[#2a4256] border border-green-500 text-white shadow-lg hover:scale-105 transition transform"
                 >
                   <CardHeader>
@@ -121,8 +126,7 @@ const TeacherDashboard = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </TeacherLayout>
   );
 };
 
