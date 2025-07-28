@@ -1,59 +1,86 @@
+// src/pages/teacher/TeacherLayout.jsx
 import React, { useState } from 'react';
-import { Menu } from 'lucide-react';
-import Sidebar from '@/components/Sidebar';
+import { NavLink, Outlet } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const navLinks = [
+  { name: 'Bosh sahifa', href: '/teacher-dashboard' },
+  { name: 'Guruhlar', href: '/teacher-dashboard/groups' },
+  { name: 'Sozlamalar', href: '/teacher-dashboard/settings' },
+];
+
+const Sidebar = ({ isOpen, onClose }) => (
+  <AnimatePresence>
+    {isOpen && (
+      <motion.aside
+        initial={{ x: '-100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '-100%' }}
+        transition={{ type: 'tween', duration: 0.3 }}
+        className="fixed top-0 left-0 w-64 h-full bg-[#0f2027] border-r border-green-700 z-50 p-6 flex flex-col"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-green-500">XCourse</h2>
+          <X className="text-white cursor-pointer" onClick={onClose} />
+        </div>
+        <nav className="space-y-3">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.href}
+              to={link.href}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `block py-2 px-4 rounded-lg font-medium transition-all hover:bg-green-700/30 ${
+                  isActive ? 'bg-green-600 text-white' : 'text-white'
+                }`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </nav>
+      </motion.aside>
+    )}
+  </AnimatePresence>
+);
+
 const TeacherLayout = ({ children }) => {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
+    <div className="min-h-screen flex bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-64 flex-shrink-0 border-r border-[#1a2e3a] bg-[#1f2e35] shadow-lg">
-        <Sidebar />
+      <div className="hidden md:flex flex-col w-64 border-r border-green-700 p-6 bg-[#0f2027]">
+        <h2 className="text-xl font-bold text-green-500 mb-6">XCourse</h2>
+        <nav className="space-y-3">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.href}
+              to={link.href}
+              className={({ isActive }) =>
+                `block py-2 px-4 rounded-lg font-medium transition-all hover:bg-green-700/30 ${
+                  isActive ? 'bg-green-600 text-white' : 'text-white'
+                }`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </nav>
       </div>
 
-      {/* Main area */}
-      <div className="flex flex-col flex-1 overflow-hidden relative">
-        {/* Mobile topbar */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-[#0f2027] border-b border-[#1a2e3a]">
-          <h1 className="text-white font-bold text-xl">XCourse</h1>
-          <button onClick={() => setShowSidebar(true)}>
-            <Menu className="w-6 h-6 text-white" />
-          </button>
-        </div>
+      {/* Mobile Hamburger */}
+      <div className="md:hidden fixed top-4 right-4 z-50">
+        <Menu onClick={() => setSidebarOpen(true)} className="text-white w-8 h-8 cursor-pointer" />
+      </div>
 
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-10">
-          <div className="max-w-6xl mx-auto">{children}</div>
-        </main>
+      {/* Mobile Sidebar */}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        {/* Mobile Sidebar */}
-        <AnimatePresence>
-          {showSidebar && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                onClick={() => setShowSidebar(false)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.5 }}
-                exit={{ opacity: 0 }}
-              />
-
-              {/* Sidebar panel */}
-              <motion.div
-                className="fixed top-0 left-0 z-50 h-full w-64 bg-[#1f2e35] shadow-xl p-6"
-                initial={{ x: '-100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '-100%' }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              >
-                <Sidebar onClose={() => setShowSidebar(false)} />
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
+      {/* Main Content */}
+      <div className="flex-1 p-4 md:p-6 overflow-x-hidden w-full">
+        {children || <Outlet />}
       </div>
     </div>
   );

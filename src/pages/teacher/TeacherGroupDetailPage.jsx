@@ -8,6 +8,8 @@ const TeacherGroupDetailsPage = () => {
   const { groupId } = useParams();
   const navigate = useNavigate();
   const [group, setGroup] = useState(null);
+  const today = new Date().toISOString().split('T')[0];
+ 
 
   useEffect(() => {
     fetch('/data/groups.json')
@@ -23,9 +25,16 @@ const TeacherGroupDetailsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white px-4 py-8">
       <div className="max-w-6xl mx-auto space-y-10">
-        <h1 className="text-3xl font-bold flex items-center gap-3">
+       <div className='flex '>
+         <h1 className="text-3xl font-bold flex items-center gap-3">
           📘 {group.name}
         </h1>
+        <div>
+          <button>
+             back to groups
+          </button>
+        </div>
+       </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Group Info */}
@@ -49,28 +58,48 @@ const TeacherGroupDetailsPage = () => {
           <div className="bg-[#1f2e35] border border-blue-400 rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">📅 Dars kunlari</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {group.dates.map((date) => (
-                <button
-                  key={date}
-                  onClick={() => navigate(`/teacher-dashboard/group/${groupId}/lesson/${date}`)}
-                  className="bg-blue-600 hover:bg-blue-700 transition text-white font-medium py-2 px-4 rounded-lg text-sm"
-                >
-                  📅 {date}
-                </button>
-              ))}
+          {group.dates.map((date) => {
+  const isToday = date === today;
+  return (
+    <button
+      key={date}
+      onClick={() => navigate(`/teacher-dashboard/group/${groupId}/lesson/${date}`)}
+      className={`font-medium py-2 px-4 rounded-lg text-sm transition 
+        ${isToday 
+          ? 'bg-green-600 hover:bg-green-700 text-white shadow-md scale-[1.03]' 
+          : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+    >
+      📅 {date} {isToday && <span className="ml-1 font-bold"></span>}
+    </button>
+  );
+})}
+
             </div>
           </div>
         </div>
 
         {/* Student List */}
-        <div className="bg-[#1f2e35] border border-orange-400 rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">🧑‍🎓 Talabalar Ro‘yxati</h2>
-          <ul className="list-disc pl-5 space-y-1 text-sm">
-            {group.students.map((student) => (
-              <li key={student.id}>{student.name}</li>
-            ))}
-          </ul>
-        </div>
+      <div className="bg-[#1f2e35] border border-orange-400 rounded-xl p-6 shadow-md">
+  <h2 className="text-xl font-bold text-orange-300 flex items-center gap-2 mb-4">
+    🧑‍🎓 Talabalar Ro‘yxati
+    <span className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-md">
+      {group.students.length} ta
+    </span>
+  </h2>
+
+  {group.students.length === 0 ? (
+    <p className="text-gray-400 italic">Talabalar mavjud emas</p>
+  ) : (
+    <ul className="divide-y divide-orange-500/30 text-sm">
+      {group.students.map((student, index) => (
+        <li key={student.id} className="py-2 pl-1">
+          <span className="text-white">{index + 1}.</span> {student.name}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
       </div>
     </div>
   );

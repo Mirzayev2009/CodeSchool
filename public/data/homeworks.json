@@ -32,5 +32,25 @@
       "answer": "Accuracy is total correct predictions; Precision is correct positive predictions",
       "type": "text"
     }
+  ],
+   "2025-07-25": [
+    {
+      "id": "hw4",
+      "title": "Name 3 types of Neural Networks",
+      "answer": "CNN, RNN, MLP",
+      "type": "text"
+    },
+    {
+      "id": "hw5",
+      "title": "Define Accuracy and Precision",
+      "answer": "Accuracy is total correct predictions; Precision is correct positive predictions",
+      "type": "text"
+    },
+      {
+      "id": "hw3",
+      "title": "Write python code",
+      "answer": "",
+      "type": "code"
+    }
   ]
 }

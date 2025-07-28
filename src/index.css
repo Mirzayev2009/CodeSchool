@@ -122,4 +122,49 @@
 .drop-shadow-glow {
   filter: drop-shadow(0 0 5px #39ff14) drop-shadow(0 0 10px #39ff14);
 }
+:root {
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --primary: #10b981;
+  --hover: #facc15;
+}
+
+.dark {
+  --bg: #0f172a;
+  --card: #1f2937;
+  --text: #f8fafc;
+  --text-muted: #9ca3af;
+  --primary: #10b981;
+  --hover: #facc15;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.card {
+  background-color: var(--card);
+  color: var(--text);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.card-title:hover,
+.card-content:hover,
+button:hover,
+h1:hover,
+h2:hover {
+  color: var(--hover);
+}
+.bg-glass {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
 

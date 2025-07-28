@@ -8,6 +8,7 @@ import TeacherGroupPageDEMO from './pages/teacher/TeacherGroupPageDEMO';
 import TeacherGroupsPage from './pages/teacher/TeacherGroupsPage';
 import TeacherSettingsPage from './pages/teacher/TeacherSettingsPage';
 import TeacherGroupDetailsPage from './pages/teacher/TeacherGroupDetailPage';
+import StudentProfilePage from './pages/student/StudentProfilePage';
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/teacher-dashboard/groups" element={<TeacherGroupsPage />} />
         <Route path="/teacher-dashboard/settings" element={<TeacherSettingsPage />} />
  <Route path='/teacher-dashboard/group-detail/:groupId' element={<TeacherGroupDetailsPage />} />
+ <Route path='/student-dashboard/profile' element = {<StudentProfilePage/>}/>
 
 
       </Routes>

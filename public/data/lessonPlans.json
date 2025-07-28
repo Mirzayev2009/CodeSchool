@@ -1,0 +1,37 @@
+{
+  "g1": {
+    "2025-07-23": {
+      "title": "Neural Networks Basics",
+      "points": [
+        "Understand structure of neural networks",
+        "Forward and backward propagation",
+        "Activation functions"
+      ]
+    }, "2025-07-25": {
+      "title": "Neural Networks Basics",
+      "points": [
+        "Understand structure of neural networks",
+        "Forward and backward propagation",
+        "Activation functions"
+      ]
+    }
+  }, 
+    "g2": {
+    "2025-07-23": {
+      "title": "Neural Networks Basics",
+      "points": [
+        "Understand structure of neural networks",
+        "Forward and backward propagation",
+        "Activation functions"
+      ]
+    }, "2025-07-25": {
+      "title": "Neural Networks Basics",
+      "points": [
+        "Understand structure of neural networks",
+        "Forward and backward propagation",
+        "Activation functions"
+      ]
+    }
+  }
+  
+}
